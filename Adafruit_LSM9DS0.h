@@ -66,12 +66,11 @@ typedef void (Adafruit_LSM9DS0::*lsm9ds0_get_sensor_func)(sensor_t*);
 class Adafruit_LSM9DS0
 {
   public:
-    Adafruit_LSM9DS0 ( int32_t sensorID = 0 );
-    Adafruit_LSM9DS0 ( TwoWire* wireBus, int32_t sensorID = 0 );
+    Adafruit_LSM9DS0 ( int32_t sensorID = 0, bool altAddr = false );
+    Adafruit_LSM9DS0 ( TwoWire* wireBus, int32_t sensorID = 0, bool altAddr = false );
     Adafruit_LSM9DS0 ( int8_t xmcs, int8_t gcs, int32_t sensorID = 0 );
     Adafruit_LSM9DS0 ( int8_t clk, int8_t miso, int8_t mosi, int8_t xmcs, int8_t gcs, int32_t sensorID = 0 );
-    
-    void initI2C( TwoWire* wireBus, int32_t sensorID );
+    void initI2C( TwoWire* wireBus, int32_t sensorID, bool altAddr );
 
 
     typedef enum
@@ -217,7 +216,8 @@ class Adafruit_LSM9DS0
         /* Take new reading. */
         (_parent->*_readFunc)();
         /* Fill in event data. */
-        (_parent->*_eventFunc)(event, millis());
+	(_parent->*_eventFunc)(event, millis());
+	return 1;
       }
       virtual void getSensor(sensor_t* sensor) {
         /* Fill in sensor metadata. */
@@ -238,6 +238,7 @@ class Adafruit_LSM9DS0
     Sensor& getTemp  ( void ) { return _tempSensor; }
 
   private:
+    boolean _altAddr;
     boolean _i2c;
     TwoWire* _wire;
     int8_t  _csg, _csxm, _mosi, _miso, _clk;

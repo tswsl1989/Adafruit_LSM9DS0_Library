@@ -18,9 +18,10 @@
  CONSTRUCTOR
  ***************************************************************************/
 
-void Adafruit_LSM9DS0::initI2C( TwoWire* wireBus, int32_t sensorID ) {
+void Adafruit_LSM9DS0::initI2C( TwoWire* wireBus, int32_t sensorID, bool altAddr ) {
     _i2c = true;
     _wire = wireBus;
+    _altAddr = _altAddr;
     _lsm9dso_sensorid_accel = sensorID + 1;
     _lsm9dso_sensorid_mag = sensorID + 2;
     _lsm9dso_sensorid_gyro = sensorID + 3;
@@ -33,12 +34,12 @@ void Adafruit_LSM9DS0::initI2C( TwoWire* wireBus, int32_t sensorID ) {
 
 
 // default
-Adafruit_LSM9DS0::Adafruit_LSM9DS0( int32_t sensorID ) {
-    initI2C(&Wire, sensorID);
+Adafruit_LSM9DS0::Adafruit_LSM9DS0( int32_t sensorID, bool altAddr ) {
+    initI2C(&Wire, sensorID, altAddr);
 }
 
-Adafruit_LSM9DS0::Adafruit_LSM9DS0( TwoWire* wireBus, int32_t sensorID ) {
-    initI2C(wireBus, sensorID);
+Adafruit_LSM9DS0::Adafruit_LSM9DS0( TwoWire* wireBus, int32_t sensorID, bool altAddr ) {
+  initI2C(wireBus, sensorID, altAddr);
 }
 
 Adafruit_LSM9DS0::Adafruit_LSM9DS0(int8_t xmcs, int8_t gcs, int32_t sensorID ) {
@@ -107,7 +108,7 @@ bool Adafruit_LSM9DS0::begin()
 //   Serial.print ("G whoami: 0x");
 //   Serial.println(id, HEX);
   if (id != LSM9DS0_G_ID)
-    return false;
+   return false;
 
   // Enable the accelerometer continous
   write8(XMTYPE, LSM9DS0_REGISTER_CTRL_REG1_XM, 0x67); // 100hz XYZ
@@ -355,10 +356,10 @@ void Adafruit_LSM9DS0::write8(boolean type, byte reg, byte value)
   byte address, _cs;
 
   if (type == GYROTYPE) {
-    address = LSM9DS0_ADDRESS_GYRO;
+    address = LSM9DS0_ADDRESS_GYRO - _altAddr;
     _cs = _csg;
   } else {
-    address = LSM9DS0_ADDRESS_ACCELMAG;
+    address = LSM9DS0_ADDRESS_ACCELMAG + _altAddr;
     _cs = _csxm;
   }
   if (_i2c) {
@@ -392,10 +393,10 @@ byte Adafruit_LSM9DS0::readBuffer(boolean type, byte reg, byte len, uint8_t *buf
   byte address, _cs;
 
   if (type == GYROTYPE) {
-    address = LSM9DS0_ADDRESS_GYRO;
+    address = LSM9DS0_ADDRESS_GYRO - _altAddr;
     _cs = _csg;
   } else {
-    address = LSM9DS0_ADDRESS_ACCELMAG;
+    address = LSM9DS0_ADDRESS_ACCELMAG + _altAddr;
     _cs = _csxm;
   }
 
