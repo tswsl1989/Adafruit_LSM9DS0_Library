@@ -21,7 +21,7 @@
 void Adafruit_LSM9DS0::initI2C( TwoWire* wireBus, int32_t sensorID, bool altAddr ) {
     _i2c = true;
     _wire = wireBus;
-    _altAddr = _altAddr;
+    _altAddr = altAddr;
     _lsm9dso_sensorid_accel = sensorID + 1;
     _lsm9dso_sensorid_mag = sensorID + 2;
     _lsm9dso_sensorid_gyro = sensorID + 3;
