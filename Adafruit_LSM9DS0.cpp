@@ -505,9 +505,9 @@ void Adafruit_LSM9DS0::getAccelSensor(sensor_t* sensor) {
   sensor->sensor_id   = _lsm9dso_sensorid_accel;
   sensor->type        = SENSOR_TYPE_ACCELEROMETER;
   sensor->min_delay   = 0;
-  sensor->max_value   = 0.0;  // ToDo
-  sensor->min_value   = 0.0;  // ToDo
-  sensor->resolution  = 0.0;  // ToDo
+  sensor->resolution  = _accel_mg_lsb;  // ToDo
+  sensor->max_value   = 32.7680 * sensor->resolution * SENSORS_GRAVITY_STANDARD;
+  sensor->min_value   = -32.7680 * sensor->resolution * SENSORS_GRAVITY_STANDARD;
 }
 
 void Adafruit_LSM9DS0::getMagSensor(sensor_t* sensor) {
@@ -518,9 +518,9 @@ void Adafruit_LSM9DS0::getMagSensor(sensor_t* sensor) {
   sensor->sensor_id   = _lsm9dso_sensorid_mag;
   sensor->type        = SENSOR_TYPE_MAGNETIC_FIELD;
   sensor->min_delay   = 0;
-  sensor->max_value   = 0.0;  // ToDo
-  sensor->min_value   = 0.0;  // ToDo
-  sensor->resolution  = 0.0;  // ToDo
+  sensor->resolution  = _mag_mgauss_lsb;  // ToDo
+  sensor->max_value   = 32.7680 * sensor->resolution;
+  sensor->min_value   = -32.7680 * sensor->resolution;
 }
 
 void Adafruit_LSM9DS0::getGyroSensor(sensor_t* sensor) {
@@ -531,9 +531,9 @@ void Adafruit_LSM9DS0::getGyroSensor(sensor_t* sensor) {
   sensor->sensor_id   = _lsm9dso_sensorid_gyro;
   sensor->type        = SENSOR_TYPE_GYROSCOPE;
   sensor->min_delay   = 0;
-  sensor->max_value   = 0.0;  // ToDo
-  sensor->min_value   = 0.0;  // ToDo
-  sensor->resolution  = 0.0;  // ToDo
+  sensor->resolution  = _gyro_dps_digit;
+  sensor->max_value   = 32768.0 * sensor->resolution;
+  sensor->min_value   = -32768.0 * sensor->resolution;
 }
 
 void Adafruit_LSM9DS0::getTempSensor(sensor_t* sensor) {
